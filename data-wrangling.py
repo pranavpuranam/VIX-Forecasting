@@ -18,19 +18,25 @@ data = pd.merge(vix, sp500, left_index=True, right_index=True, how='inner')
 # Save to CSV
 data.to_csv("vix_sp500_merged.csv")
 
-print(data.head())
+plt.rcParams['font.family'] = 'Arial'
 
-plt.rcParams['font.family'] = 'Helvetica'  # Set Helvetica font globally
+fig, axs = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
 
-plt.figure(figsize=(12,6))
-plt.plot(data.index, data['VIX_Close'], label='VIX Close', color='red')
-plt.plot(data.index, data['SP500_Close'], label='S&P 500 Close', color='blue')
+# VIX plot
+axs[0].plot(data.index, data['VIX_Close'], color ='red', linewidth=1.5)  # slightly softer red
+axs[0].set_title('VIX Close Price (1990 - Present)', fontsize=16)
+axs[0].set_ylabel('VIX Price', fontsize=14)
+axs[0].grid(False)
+axs[0].tick_params(axis='both', which='major', length=4, width=1)
 
-plt.title('VIX and S&P 500 Close Prices (1990 - Present)', fontsize=16)
-plt.xlabel('Date', fontsize=14)
-plt.ylabel('Price', fontsize=14)
-plt.legend(fontsize=12)
-plt.grid(True)
+# S&P 500 plot
+axs[1].plot(data.index, data['SP500_Close'], color='blue', linewidth=1.5)  # softer blue
+axs[1].set_title('S&P 500 Close Price (1990 - Present)', fontsize=16)
+axs[1].set_xlabel('Date', fontsize=14)
+axs[1].set_ylabel('S&P 500 Price', fontsize=14)
+axs[1].grid(False)
+axs[1].tick_params(axis='both', which='major', length=4, width=1)
+
 plt.tight_layout()
-
+plt.savefig("vix_sp500_plots.png", dpi=300)
 plt.show()
